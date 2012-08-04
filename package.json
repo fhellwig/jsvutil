@@ -1,0 +1,22 @@
+{
+    "name": "jsvutil",
+    "version": "0.0.1",
+    "description": "A Node.js utility wrapper for the JSON Schema Validator (JSV).",
+    "keywords": ["json","schema"],
+    "licenses": [{
+        "type": "MIT",
+        "url": "http://www.opensource.org/licenses/MIT"
+    }],
+    "author": "Frank Hellwig <frank@hellwig.org>",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/fhellwig/jsvutil.git"
+    },
+    "main": "./index.js",
+    "dependencies": {
+        "JSV": "4.0.x"
+    },
+    "engine": {
+        "node": ">=0.8.0"
+    }
+}
