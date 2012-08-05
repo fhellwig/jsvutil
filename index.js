@@ -27,7 +27,9 @@ var jsv = require('./lib/jsv.js');
 //-----------------------------------------------------------------------------
 
 /**
- * Validates the specified instance against the specified schema.
+ * Validates the specified instance against the specified schema. Note that
+ * the instance is first copied using JSON.stringify so that applying default
+ * values does not change the parameter, only the return (or callback) value.
  */
 function validate(instance, schema, cb) {
     if (typeof cb === 'function') {
@@ -37,8 +39,17 @@ function validate(instance, schema, cb) {
             return cb(err);
         }
     }
-    // Copy the instance so default values can be applied.
-    instance = JSON.parse(JSON.stringify(instance));
+    if (typeof instance === 'object') {
+        instance = JSON.stringify(instance); // copy
+    } else if (typeof instance !== 'string') {
+        throw new TypeError('Instance must be a string, object, or array.');
+    }
+    instance = JSON.parse(instance);
+    if (typeof schema === 'string') {
+        schema = JSON.parse(schema);
+    } else if (typeof schema !== 'object') {
+        throw new TypeError('Schema must be a string, object, or array.');
+    }
     applyDefaultValues(instance, schema.properties);
     jsv.validate(instance, schema);
     return instance;
@@ -56,6 +67,11 @@ function check(schema, cb) {
         } catch (err) {
             return cb(err);
         }
+    }
+    if (typeof schema === 'string') {
+        schema = JSON.parse(schema);
+    } else if (typeof schema !== 'object') {
+        throw new TypeError('Schema must be a string, object, or array.');
     }
     jsv.check(schema);
     return schema;
